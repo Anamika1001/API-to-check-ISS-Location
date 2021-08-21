@@ -2,12 +2,15 @@ import requests
 from datetime import *
 import smtplib
 import time
-
+# Your city's longitude and latitude
 MY_LAT=22.638333
 MY_LONG=88.375687
+
+# Id and password for sending mail
 UserId=input("Enter your email id: ")
 UserPassword=input("Enter your password: ")
 
+#  Function to check ISS's location
 def iss_overhead():
     response = requests.get("http://api.open-notify.org/iss-now.json")
     Error=response.raise_for_status()
@@ -17,6 +20,8 @@ def iss_overhead():
 
     if MY_LAT -5 <= iss_latitude <= MY_LAT+5 and MY_LONG -5 <= iss_longitude <= MY_LONG+5:
         return True
+
+# Fuction to check is it dark or not
 def Is_night():
     parameters={
         "lat":MY_LAT,
@@ -33,7 +38,8 @@ def Is_night():
     hour=time_now.hour
     if hour>=sunset or hour<=sunrise:
         return True
-
+        
+# getting mail when both function's are true
 while True:
     time.sleep(90)
     if iss_overhead() and Is_night():
